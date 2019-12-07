@@ -9,7 +9,7 @@ Resources:
       CodeUri: src
       Handler: index.handler
       Runtime: python3.6
-      Timeout: 5
+      Timeout: 10
 
   Macro:
     Type: AWS::CloudFormation::Macro

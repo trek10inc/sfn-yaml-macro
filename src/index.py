@@ -1,6 +1,5 @@
 import copy
 import json
-import time
 
 
 def get_resources_of_type(resources, resource_type):
