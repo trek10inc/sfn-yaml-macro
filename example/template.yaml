@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: [ AWS::Serverless-2016-10-31, SFNYAML ]
+
+
+Resources:
+  MyStateMachine:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      RoleArn: !GetAtt ExecutionRole.Arn
+      # DefinitionString: !Sub |
+      #   {
+      #     "StartAt": "Hello"
+      #     "States": {
+      #       "Hello": {
+      #         "Type": "Task",
+      #         "Resource": "${Function.Arn}",
+      #         "End": true
+      #       }
+      #     }
+      #   }
+      Definition:
+        StartAt: Hello
+        States:
+          Hello:
+            Type: Task
+            Resource: !GetAtt Function.Arn
+            End: true
+
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src/
+      Handler: app.handler
+      Runtime: python3.6
+      Timeout: 10
+
+  ExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: states.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: executionrole
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: '*'
+                Resource: '*'

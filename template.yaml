@@ -1,0 +1,18 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+
+Resources:
+  SFNYAMLMacroFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src
+      Handler: index.handler
+      Runtime: python3.6
+      Timeout: 5
+
+  Macro:
+    Type: AWS::CloudFormation::Macro
+    Properties:
+      Name: SFNYAML
+      FunctionName: !GetAtt SFNYAMLMacroFunction.Arn
