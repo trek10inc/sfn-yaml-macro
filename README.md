@@ -41,6 +41,10 @@ Then you can replace the JSON-defined `DefinitionString` with YAML-defined `Defi
 
 All of the CloudFormation intrinsic functions are supported, and used as expected
 
+## Known Issues
+
+- Does not support `AWS::NoValue` being used in the definition
+
 ## License
 
 MIT No Attribution (undefined)
