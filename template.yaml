@@ -2,6 +2,20 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 
 
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: sfn-yaml-macro
+    Description: Use YAML to define your Amazon States Language for your AWS CloudFormation-defined StepFunctions state machines
+    Author: Trek10
+    SpdxLicenseId: MIT No Attribution
+    LicenseUrl: LICENSE.txt
+    ReadmeUrl: README.md
+    Labels: ['cfn', 'sfn', 'macro', 'yaml', 'cloudformation', 'stepfunctions', 'step', 'functions', 'states']
+    HomePageUrl: https://github.com/trek10inc/sfn-yaml-macro
+    SemanticVersion: 0.2.1
+    SourceCodeUrl: https://github.com/trek10inc/sfn-yaml-macro
+
+
 Resources:
   SFNYAMLMacroFunction:
     Type: AWS::Serverless::Function

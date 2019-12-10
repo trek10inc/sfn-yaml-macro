@@ -29,10 +29,10 @@ def process_template(template):
     state_machines = get_resources_of_type(template['Resources'], 'AWS::StepFunctions::StateMachine')
 
     for name, resource in state_machines.items():
-        if not new_template['Resources'][name]['Properties'].get('Definition'):
+        if not new_template['Resources'][name]['Properties'].get('DefinitionString'):
             continue
 
-        definition = new_template['Resources'][name]['Properties'].pop('Definition')
+        definition = new_template['Resources'][name]['Properties'].pop('DefinitionString')
         converted_definition, sub_mapping = convert_definition(definition, {})
 
         if sub_mapping:
