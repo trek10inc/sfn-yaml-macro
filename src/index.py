@@ -11,17 +11,30 @@ def get_resources_of_type(resources, resource_type):
 
 
 def convert_definition(definition, sub_mapping):
+    new_definition = copy.deepcopy(definition)
+    new_sub_mapping = copy.deepcopy(sub_mapping)
+
     for key, value in definition.items():
         if key == 'Ref' or key.startswith('Fn::'):
             sub_prefix = str(len(sub_mapping.keys())) # unique keys for sub map
             sub_key = sub_prefix + key.replace('::', '')
-            sub_mapping[sub_key] = {key: value}
-            definition = '${' + sub_key + '}'
+            new_sub_mapping[sub_key] = { key: value }
+            return '${' + sub_key + '}', new_sub_mapping
+
+        elif type(value) == list:
+            new_definition[key] = []
+            for element in definition[key]:
+                new_element, given_sub_mapping = convert_definition(element, new_sub_mapping)
+                new_sub_mapping.update(given_sub_mapping)
+                new_definition[key].append(new_element)
+            return new_definition, new_sub_mapping
 
         elif type(value) == dict:
-            definition[key], sub_mapping = convert_definition(value, sub_mapping)
+            new_definition[key], given_sub_mapping = convert_definition(value, new_sub_mapping)
+            new_sub_mapping.update(given_sub_mapping)
+            return new_definition, new_sub_mapping
 
-    return definition, sub_mapping
+    return new_definition, new_sub_mapping
 
 
 def process_template(template):
@@ -37,16 +50,17 @@ def process_template(template):
 
         if sub_mapping:
             new_template['Resources'][name]['Properties']['DefinitionString'] = {
-                'Fn::Sub': [ json.dumps(converted_definition), sub_mapping ],
+                'Fn::Sub': [ json.dumps(converted_definition, indent=2), sub_mapping ],
             }
         else:
-            new_template['Resources'][name]['Properties']['DefinitionString'] = json.dumps(converted_definition)
+            print(json.dumps(converted_definition, indent=2))
+            new_template['Resources'][name]['Properties']['DefinitionString'] = json.dumps(converted_definition, indent=2)
 
     return new_template
 
 
 def handler(event, context):
-    print('Event', json.dumps(event, default=str))
+    # print('Event', json.dumps(event, default=str))
     template = event['fragment']
     status = 'success'
 

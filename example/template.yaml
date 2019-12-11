@@ -19,13 +19,31 @@ Resources:
       #     }
       #   }
       DefinitionString:
-        StartAt: Hello
+        Comment: Parallel Example.
+        StartAt: LookupCustomerInfo
         States:
-          Hello:
-            Type: Task
-            Resource: !GetAtt Function.Arn
+          LookupCustomerInfo:
+            Type: Parallel
             End: true
-
+            Branches:
+            - StartAt: LookupAddress
+              States:
+                LookupAddress:
+                  Type: Task
+                  Resource:
+                    Fn::GetAtt:
+                    - Function
+                    - Arn
+                  End: true
+            - StartAt: LookupPhone
+              States:
+                LookupPhone:
+                  Type: Task
+                  Resource:
+                    Fn::GetAtt:
+                    - Function
+                    - Arn
+                  End: true
   Function:
     Type: AWS::Serverless::Function
     Properties:
