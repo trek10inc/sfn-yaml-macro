@@ -52,10 +52,10 @@ def process_template(template):
 
         if sub_mapping:
             new_template['Resources'][name]['Properties']['DefinitionString'] = {
-                'Fn::Sub': [ json.dumps(converted_definition), sub_mapping ],
+                'Fn::Sub': [ json.dumps(converted_definition, indent=2), sub_mapping ],
             }
         else:
-            new_template['Resources'][name]['Properties']['DefinitionString'] = json.dumps(converted_definition)
+            new_template['Resources'][name]['Properties']['DefinitionString'] = json.dumps(converted_definition, indent=2)
 
     return new_template
 
