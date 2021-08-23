@@ -1,3 +1,9 @@
+# DEPRECATED
+
+This repository has been deprecated in favor of the native support for StepFunctions definitions in YAML.
+
+![spacklepunch](https://faasandfurious.com/pages/spacklepunch.png)
+
 # AWS StepFunctions YAML Macro
 
 Use YAML to define your Amazon States Language for your AWS CloudFormation-defined StepFunctions state machines
